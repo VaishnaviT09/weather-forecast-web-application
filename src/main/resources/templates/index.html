@@ -33,45 +33,11 @@
 <figure class="highcharts-figure">
     <div id="container"></div>
     <p class="highcharts-description">
-        Basic line chart showing trends in a dataset. This chart includes the
-        <code>series-label</code> module, which adds a label to each line for
-        enhanced readability.
+        Basic line chart showing temperature of particular city.
     </p>
 </figure>
 
 <script>
-    function fetchData() {
-        fetch('/multiData')
-            .then(response => response.json())
-            .then(data => {
-            var temp= data.temp;
-            var time= data.time;
-                let ctx = document.getElementById('temperatureChart').getContext('2d');
-                let chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: time,
-                        datasets: [{
-                            label: 'Temperature (K)',
-                            data: temp,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            });
-    }
-
 $.ajax({
    url: 'multiData',
    success: function(result){
@@ -92,16 +58,6 @@ $.ajax({
    }
 })
 
-var currentDate = new Date();
-
-// Set time to 03:00:00
-currentDate.setHours(3);
-currentDate.setMinutes(0);
-currentDate.setSeconds(0);
-currentDate.setMilliseconds(0);
-
-// Calculate milliseconds since Unix epoch for 03:00:00 today
-var pointStart = currentDate.getTime();
 
 function multipleChart(dataResult){
   Highcharts.chart('container', {
