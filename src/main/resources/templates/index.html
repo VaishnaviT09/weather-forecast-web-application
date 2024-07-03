@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Weather Information</h1>
+
+<form th:action="@{/addCity}" method="post">
+    <input type="text" name="city" placeholder="Enter city">
+    <button type="submit">Add City</button>
+</form>
+
+<ul>
+    <li th:each="city : ${cities}">
+        <span th:text="${city}"></span>
+        <form th:action="@{/removeCity}" method="post">
+            <input type="hidden" name="city" th:value="${city}">
+            <button type="submit">Remove</button>
+        </form>
+    </li>
+</ul>
+
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+        Basic line chart showing trends in a dataset. This chart includes the
+        <code>series-label</code> module, which adds a label to each line for
+        enhanced readability.
+    </p>
+</figure>
+
+<script>
+    function fetchData() {
+        fetch('/multiData')
+            .then(response => response.json())
+            .then(data => {
+            var temp= data.temp;
+            var time= data.time;
+                let ctx = document.getElementById('temperatureChart').getContext('2d');
+                let chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: time,
+                        datasets: [{
+                            label: 'Temperature (K)',
+                            data: temp,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+    }
+
+$.ajax({
+   url: 'multiData',
+   success: function(result){
+    console.log(result);
+    var dataResult = [];
+    for(var key in result){
+      var singleObject ={
+        name:'',
+        data:[]
+      }
+      singleObject.name=key.toUpperCase();
+      for(var i=0;i<result[key].length;i++){
+        singleObject.data.push(result[key][i])
+      }
+      dataResult.push(singleObject);
+    }
+    multipleChart(dataResult);
+   }
+})
+
+var currentDate = new Date();
+
+// Set time to 03:00:00
+currentDate.setHours(3);
+currentDate.setMinutes(0);
+currentDate.setSeconds(0);
+currentDate.setMilliseconds(0);
+
+// Calculate milliseconds since Unix epoch for 03:00:00 today
+var pointStart = currentDate.getTime();
+
+function multipleChart(dataResult){
+  Highcharts.chart('container', {
+
+    title: {
+        text: 'Temperature Report',
+        align: 'left'
+    },
+
+    subtitle: {
+        text: 'Todays temperature analysis ',
+        align: 'left'
+    },
+
+    yAxis: {
+        title: {
+            text: 'Temperature (C)'
+        }
+    },
+
+    xAxis: {
+
+        labels: {
+            overflow: 'justify'
+        },
+        categories:[
+         '06:00','09:00','12:00','15:00','18:00','21:00'
+        ]
+    },
+
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    series: dataResult,
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
+});
+
+}
+    document.addEventListener('DOMContentLoaded', multipleChart);
+</script>
+</body>
+</html>
