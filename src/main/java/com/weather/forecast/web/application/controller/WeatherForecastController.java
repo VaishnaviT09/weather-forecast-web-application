@@ -1,11 +1,7 @@
 package com.weather.forecast.web.application.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weather.forecast.web.application.Dto.WeatherData;
 import com.weather.forecast.web.application.service.WeatherService;
-import okhttp3.Response;
-
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -38,8 +34,8 @@ public class WeatherForecastController {
         try {
             WeatherData weatherData = weatherService.getWeather(city);
 
-            List<Double> temp =  weatherData.getTempData();
-            cityWeatherData.put(city,temp);
+            List<Double> temp = weatherData.getTempData();
+            cityWeatherData.put(city, temp);
         } catch (IOException e) {
             model.addAttribute("error", "Error fetching weather data for " + city);
         } catch (ParseException e) {
@@ -58,14 +54,14 @@ public class WeatherForecastController {
     @ResponseBody
     public ResponseEntity<?> getMultipleData() {
 
-        Map<String, List<Double>> result=new HashMap<>();
+        Map<String, List<Double>> result = new HashMap<>();
         JsonArray jsonTemp = new JsonArray();
         JsonArray jsonDate = new JsonArray();
         JsonObject jsonObject = new JsonObject();
 
         for (Map.Entry<String, List<Double>> entry : cityWeatherData.entrySet()) {
 
-            List<Double> temperature=new ArrayList<>();
+            List<Double> temperature = new ArrayList<>();
             for (Double innerEntry : entry.getValue()) {
                 temperature.add(innerEntry);
             }

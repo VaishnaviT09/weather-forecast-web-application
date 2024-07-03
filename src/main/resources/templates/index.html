@@ -12,12 +12,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-<h1>Weather Information</h1>
+<h1 align="center">Weather Information</h1>
 
-<form th:action="@{/addCity}" method="post">
+<center><form th:action="@{/addCity}" method="post">
     <input type="text" name="city" placeholder="Enter city">
     <button type="submit">Add City</button>
-</form>
+</form></center>
 
 <ul>
     <li th:each="city : ${cities}">
@@ -33,7 +33,7 @@
 <figure class="highcharts-figure">
     <div id="container"></div>
     <p class="highcharts-description">
-        Basic line chart showing temperature of particular city.
+        Line chart showing temperature of particular city.
     </p>
 </figure>
 
@@ -74,7 +74,7 @@ function multipleChart(dataResult){
 
     yAxis: {
         title: {
-            text: 'Temperature (C)'
+            text: 'Temperature (°C)'
         }
     },
 

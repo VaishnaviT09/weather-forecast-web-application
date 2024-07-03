@@ -12,30 +12,12 @@ import java.util.stream.Collectors;
 
 public class WeatherData {
     private final JSONObject data;
-    List<Object> list=new ArrayList<>();
-    Map<String, Double> result =new HashMap<>();
-    public Map<String, Double> getResultData() throws ParseException {
+    List<Object> list = new ArrayList<>();
+    Map<String, Double> result = new HashMap<>();
 
-        JSONArray listArray = data.getJSONArray("list");
-
-        for (int i = 0; i < listArray.length(); i++) {
-            JSONObject item = listArray.getJSONObject(i);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = sdf.parse(sdf.format(new Date()));
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String strDate = dateFormat.format(date);
-            if(strDate.equals(item.getString("dt_txt").split(" ")[0])){
-                double temp = item.getJSONObject("main").getDouble("temp");
-                String dtTxt = item.getString("dt_txt");
-                result.put(dtTxt,temp);
-            }
-
-        }
-        return result;
-    }
     public List<Double> getTempData() throws ParseException {
 
-        List<Double> result=new ArrayList<>();
+        List<Double> result = new ArrayList<>();
         JSONArray listArray = data.getJSONArray("list");
         Map<String, Double> data = new HashMap<>();
         for (int i = 0; i < listArray.length(); i++) {
@@ -51,11 +33,11 @@ public class WeatherData {
                 data.put(dtTxt, temp);
             }
         }
-            Map<Date, Double> resultData = Util.convertStringMapToDateMap(data);
-            Map<Date, Double> resultDataByAscDate = Util.sortByDate(resultData);
+        Map<Date, Double> resultData = Util.convertStringMapToDateMap(data);
+        Map<Date, Double> resultDataByAscDate = Util.sortByDate(resultData);
 
-            result = resultDataByAscDate.entrySet().stream().map(Map.Entry::getValue)
-                    .collect(Collectors.toList());
+        result = resultDataByAscDate.entrySet().stream().map(Map.Entry::getValue)
+                .collect(Collectors.toList());
 
         return result;
     }
@@ -63,14 +45,5 @@ public class WeatherData {
     public WeatherData(JSONObject data) {
         this.data = data;
     }
-
-    public double getTemperature() {
-        return data.getJSONObject("main").getDouble("temp");
-    }
-
-    public String getTime() {
-        return data.getJSONArray("weather").getJSONObject(0).getString("description");
-    }
-
 
 }

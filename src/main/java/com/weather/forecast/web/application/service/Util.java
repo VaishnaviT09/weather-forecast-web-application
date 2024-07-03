@@ -1,7 +1,5 @@
 package com.weather.forecast.web.application.service;
 
-import org.springframework.stereotype.Component;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
