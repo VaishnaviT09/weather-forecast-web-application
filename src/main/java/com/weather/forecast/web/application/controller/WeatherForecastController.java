@@ -55,10 +55,6 @@ public class WeatherForecastController {
     public ResponseEntity<?> getMultipleData() {
 
         Map<String, List<Double>> result = new HashMap<>();
-        JsonArray jsonTemp = new JsonArray();
-        JsonArray jsonDate = new JsonArray();
-        JsonObject jsonObject = new JsonObject();
-
         for (Map.Entry<String, List<Double>> entry : cityWeatherData.entrySet()) {
 
             List<Double> temperature = new ArrayList<>();
